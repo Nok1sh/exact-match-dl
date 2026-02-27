@@ -1,5 +1,6 @@
 import torch
 import tqdm
+import wandb
 
 from torch import nn
 from torch.nn.utils import clip_grad_norm_
@@ -15,6 +16,21 @@ def run_train(
         val_data,
         epochs
 ):
+
+    wandb.init(
+        project="extract-match-qa",
+        name=f"first_train",
+        tags=["bert", "russian", "qa"],
+        config={
+            "model": "MilyaShams/rubert-russian-qa-sberquad",
+            "epochs": epochs,
+            "batch_size": 32,
+            "learning_rate": 5e-5,
+            "weight_decay": 1e-2,
+            "warmup_ratio": 0.1,
+        }
+    )
+
     loss_function = nn.CrossEntropyLoss()
 
     optimizer = AdamW(model.parameters(), lr=5e-5, weight_decay=1e-2)
@@ -65,11 +81,23 @@ def run_train(
         exact_match_val.append(accuracy_val)
         f1_val.append(f1)
 
+        print(f"F1 score: {f1}")
         print(f"Epoch: [{epoch+1}/{epochs}], train_loos: {loss_t:.4f}, train_exact_match: {accuracy_train:.4f}, val_loos: {loss_v:.4f},  val_exact_match: {accuracy_val:.4f}")
+
+        wandb.log({
+            'train_loss': loss_t,
+            'train_exact_match': accuracy_train,
+            'val_loss': loss_v,
+            'val_exact_match': accuracy_val,
+            'val_f1': f1,
+            'epoch': epoch + 1
+        })
     
-        if epoch % 3 == 0 or epoch == epochs-1:
-            torch.save(model.parameters(), f"checkpoints/checkpoint_{epoch+1}")
+        if epoch % 2 == 0 or epoch == epochs-1:
+            torch.save(model.state_dict(), f"checkpoints/checkpoint_{epoch+1}.pt")
     
+    wandb.finish()
+
     return [
         loss_train,
         loss_val,
