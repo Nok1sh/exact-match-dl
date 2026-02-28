@@ -1,0 +1,6 @@
+torch==2.10.0
+tqdm==4.67.2
+pandas==2.3.3
+matplotlib==3.10.8
+transformers==5.2.0
+wandb==0.25.0
