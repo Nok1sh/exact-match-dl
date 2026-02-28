@@ -18,9 +18,7 @@ The dataset, as mentioned above, is a collection of legal documents. It contains
 
 ## Metrics on Fine-Tuning
 
-```
 I use a checkpoint from the third training epoch before the model started to overfit
-```
 
 >Validation loss: 0.34
 >Validation accuracy: 0.88
@@ -28,11 +26,9 @@ I use a checkpoint from the third training epoch before the model started to ove
 
 ## Metrics after compare with reference
 
-```
 The reference was taken from a GitHub file with a task
 
 I can't say that the reference results are accurate, as they also contain many errors
-```
 
 >Similarity: 80.5%
 >F1 where not similarity: 0.79
