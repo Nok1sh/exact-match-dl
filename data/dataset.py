@@ -2,9 +2,9 @@ import torch
 import json
 
 from torch.utils.data import Dataset
-from transformers import AutoTokenizer
+from model.parameters import Params
 
-tokenizer = AutoTokenizer.from_pretrained("MilyaShams/rubert-russian-qa-sberquad", return_offsets_mapping=True)
+tokenizer = Params.TOKENIZER
 
 class ExtractMatchDataset(Dataset):
 

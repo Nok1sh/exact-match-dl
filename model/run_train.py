@@ -6,9 +6,10 @@ from torch import nn
 from torch.nn.utils import clip_grad_norm_
 from torch.optim import AdamW
 from transformers import get_linear_schedule_with_warmup
+from model.parameters import Params
 
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = Params.DEVICE
 
 def run_train(
         model,
